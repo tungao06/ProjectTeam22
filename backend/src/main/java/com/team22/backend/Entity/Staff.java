@@ -1,31 +1,60 @@
-package com.Team22.backend.Entity;
-    import javax.persistence.*;
-    import lombok.*;
+package com.team22.backend.Entity;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import lombok.*;
+
+import org.hibernate.annotations.*;
+import java.util.*;
 
 @Data
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Table(name="Staff")
-
+@Table(name = "Staff")
 public class Staff {
-
-
     @Id
-    @SequenceGenerator(name="staff_seq",sequenceName="staff_seq")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="staff_seq")
-    @Column(name="staffId",unique = true, nullable = false)
+    @SequenceGenerator(name = "staff_seq", sequenceName = "staff_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staff_seq")
+    @Column(name = "Staff_ID", unique = true, nullable = false)
 
-    private @NonNull Long staffId;
-    private @NonNull String staffIds;
-    private          String staffName;
-    private          String staffGender;
-    private          String staffJobtype;
-    private          String staffPhone;
-    private          int staffSalary;
-    private          String staffStatus;
+    @NotNull
+    private Long staffId;
+
+    @NotNull(message = "staffIds not be null")
+    private String staffIds;
+
+    @NotNull(message = "staffName not be null")
+    @Column(unique = true)
+    private String staffName;
+
+    @NotNull(message = "staffPassword not be null")
+    private String staffPassword;
+
+    @NotNull(message = "staffPhone not be null")
+    @Size(min = 12, max = 12)
+    @Pattern(regexp = "([0][0-9]{2}-[0-9]{3}-[0-9]{4})")
+    private String staffPhone;
+
+    @NotNull(message = "staffSalary not be null")
+    private Integer staffSalary;
+
+    @NotNull(message = "staffStatus not be null")
+    private String staffStatus;
+
+    @NotNull(message = "staffJobtype not be null")
+    private String staffJobtype;
+
+    @NotNull(message = "staffGender not be null")
+    private String staffGender;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Position.class)
     @JoinColumn(name = "positionId", insertable = true)
@@ -38,6 +67,5 @@ public class Staff {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Education.class)
     @JoinColumn(name = "educationId", insertable = true)
     private Education education;
-
 
 }
