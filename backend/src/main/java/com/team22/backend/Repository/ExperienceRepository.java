@@ -1,5 +1,5 @@
-package com.Team22.backend.Repository;
-import com.Team22.backend.Entity.*;
+package com.team22.backend.Repository;
+import com.team22.backend.Entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
