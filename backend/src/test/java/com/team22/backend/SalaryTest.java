@@ -49,6 +49,7 @@ public class SalaryTest {
 		Salary sa = new Salary();
 		sa.setSalaryId(8L);
 		sa.setSalaryIds("SA8");
+		sa.setSalaryBankId("B123456789221");
 		sa.setSalaryDate(new Date());
 		sa.setStaff(staffRepository.findByStaffId(1L));
 		sa.setPayer(payerRepository.findByPayerId(1L));
@@ -75,6 +76,7 @@ public class SalaryTest {
 		Salary sa = new Salary();
 		sa.setSalaryId(null);
 		sa.setSalaryIds(null);
+		sa.setSalaryBankId(null);
 		sa.setSalaryDate(null);
 		sa.setStaff(staffRepository.findByStaffId(null));
 		sa.setPayer(payerRepository.findByPayerId(null));
@@ -93,9 +95,70 @@ public class SalaryTest {
 			System.out.println();
 			System.out.println();
 			assertEquals(violations.isEmpty(), false);
-			assertEquals(violations.size(), 2);
+			assertEquals(violations.size(), 3);
 		}
 	}
+	
+	// Test Payer Size มากกว่า 2 แต่น้อยกว่า 20
+	@Test
+	public void TestSalaryBankIdOverMaxSize() {
+		Salary sa = new Salary();
+		sa.setSalaryId(10L);
+		sa.setSalaryIds("SA10");
+		sa.setSalaryBankId("B123456789123333333333333");
+		sa.setSalaryDate(new Date());
+		sa.setStaff(staffRepository.findByStaffId(3L));
+		sa.setPayer(payerRepository.findByPayerId(3L));
+
+		salaryRepository.save(sa);
+		try {
+			entityManager.flush();
+			fail("Should not pass to this line : TestSalaryBankIdOverMaxSize");
+		} catch (javax.validation.ConstraintViolationException e) {
+			Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println(">>>>>> TestSalaryBankIdOverMaxSize :");
+			System.out.println(e.getMessage());
+			System.out.println();
+			System.out.println();
+			assertEquals(violations.isEmpty(), false);
+			assertEquals(violations.size(), 2);
+
+		}
+	}
+
+	// Test SalaryBankId Pattern ไม่ได้ขึ้นต้นด้วย B
+	@Test
+	public void TestSalaryBankIdPatternFalse() {
+		Salary sa = new Salary();
+		sa.setSalaryId(11L);
+		sa.setSalaryIds("SA11");
+		sa.setSalaryBankId("A234567891111");
+		sa.setSalaryDate(new Date());
+		sa.setStaff(staffRepository.findByStaffId(2L));
+		sa.setPayer(payerRepository.findByPayerId(2L));
+
+		salaryRepository.save(sa);
+		try {
+			entityManager.flush();
+			fail("Should not pass to this line : TestSalaryBankIdPatternFalse");
+		} catch (javax.validation.ConstraintViolationException e) {
+			Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println(">>>>>> TestSalaryBankIdPatternFalse :");
+			System.out.println(e.getMessage());
+			System.out.println();
+			System.out.println();
+			assertEquals(violations.isEmpty(), false);
+			assertEquals(violations.size(), 1);
+
+		}
+	}
+
 
 	// ทดสอบข้อมูล Payer ไม่ null
 	@Test
