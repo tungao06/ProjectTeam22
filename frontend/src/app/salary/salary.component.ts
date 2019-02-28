@@ -167,12 +167,14 @@ export class SalaryComponent implements OnInit {
       this.snackBar.open("กรุณาเลือก Status");
       this.views.staffStatus = this.views.SelectStaffStatus;
     } else {
-      this.salaryservice
-            if (!rex1.test(this.views.salaryBankId)) {
-              this.snackBar.open("BankId ไม่ถูกต้อง");
-              console.log(this.views.salaryBankId);
-            }
-                this.httpClient
+      this.salaryservice;
+      if (!this.views.salaryBankId) {
+        this.views.salaryBankId = this.views.SelectSalaryBankId;
+      } else if (!rex1.test(this.views.salaryBankId)) {
+        this.snackBar.open("BankId ไม่ถูกต้อง");
+        console.log(this.views.salaryBankId);
+      }
+      this.httpClient
         .put(
           "http://localhost:8080/salary/" +
             this.views.salaryId +
